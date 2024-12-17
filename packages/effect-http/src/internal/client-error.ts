@@ -18,6 +18,7 @@ export class ClientErrorServerSideImpl<S extends number> extends Data.TaggedErro
   message: string
   error: unknown
   status: S
+  headers?: Record<string, string> | undefined
   side: "server"
 }> implements ClientError.ClientErrorServerSide {
   readonly [ServerSideErrorTypeId] = {}
@@ -68,6 +69,22 @@ export const makeServerSide = <S extends number>(
     message: message ?? getMessage(error),
     error,
     status,
+    side: "server"
+  })
+}
+
+/** @internal */
+export const makeServerSideWithHeaders = <S extends number>(
+  error: unknown,
+  status: S,
+  headers: Record<string, string> | undefined,
+  message?: string
+) => {
+  return new ClientErrorServerSideImpl<S>({
+    message: message ?? getMessage(error),
+    error,
+    status,
+    headers,
     side: "server"
   })
 }

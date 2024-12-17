@@ -83,7 +83,9 @@ const handleUnsucessful = Unify.unify(
       return response.json.pipe(
         Effect.orElse(() => response.text),
         Effect.orElseSucceed(() => "No body provided"),
-        Effect.flatMap((error) => Effect.fail(ClientError.makeServerSide(error, response.status)))
+        Effect.flatMap((error) =>
+          Effect.fail(ClientError.makeServerSideWithHeaders(error, response.status, response.headers))
+        )
       )
     }
 

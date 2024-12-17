@@ -63,6 +63,7 @@ export interface ClientErrorServerSide<S extends number = number> extends Cause.
   readonly error: unknown
   readonly status: S
   readonly side: "server"
+  readonly headers?: Record<string, string> | undefined
 }
 
 /**
@@ -78,8 +79,20 @@ export const makeClientSide: (error: unknown, message?: string) => ClientErrorCl
 export const makeServerSide: <S extends number>(
   error: unknown,
   status: S,
-  message?: string
+  message?: string,
+  headers?: Record<string, string> | undefined
 ) => ClientErrorServerSide<S> = internal.makeServerSide
+
+/**
+ * @category constructors
+ * @since 1.0.0
+ */
+export const makeServerSideWithHeaders: <S extends number>(
+  error: unknown,
+  status: S,
+  headers: Record<string, string> | undefined,
+  message?: string
+) => ClientErrorServerSide<S> = internal.makeServerSideWithHeaders
 
 /**
  * @category constructors
